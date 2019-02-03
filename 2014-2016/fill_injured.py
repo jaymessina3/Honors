@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct 29 19:21:31 2018
+
+@author: JayMessina
+"""
+
+import openpyxl
+
+def main():
+    book = openpyxl.Workbook()
+    d = {'Gary Neal', 'Lance Stephenson', 'Zaur Pachulia / Zaza Pachulia', 'Marcus Thornton (T.)', 'Courtney Lee', 'Ian Mahinmi', 'Jeff Teague', 'Enes Kanter', 'Jae Crowder', 'Pablo Prigioni', 'Trey Burke', 'Francisco Garcia', 'Aaron Gordon', 'Malcolm Thomas (b)', 'Robbie Hummel', 'Shane Larkin', 'T.J. Warren', 'Anthony Bennett', 'Alec Burks', 'Bojan Bogdanovic', 'Tim Duncan', 'Steven Adams', 'Joel Anthony', 'James Ennis', 'Luke Ridnour', 'K.J. McDaniels', 'Willie Green', 'Andre Roberson', 'Nick Collison', 'Reggie Bullock', 'Zach LaVine', 'James Young', 'Deron Williams', 'Kevin Love', 'Shabazz Napier', 'Maurice Williams / Mo Williams', 'Andre Iguodala', 'Isaiah Canaan', 'Jimmy Butler', 'Brandan Wright', 'Alex Len', 'Jamal Crawford', 'Travis Wear', 'Lavoy Allen', 'Wayne Ellington', 'Jarrett Jack', 'Luol Deng', 'Cartier Martin', 'Thomas Robinson', 'Zach Randolph', 'Dorell Wright', 'Kevin Martin', 'Lance Thomas', 'Arron Afflalo', 'Josh McRoberts', 'Nikola Vucevic', 'Ryan Kelly', 'Otto Porter Jr.', 'Ognjen Kuzmic / Ognen Kuzmic', 'Giannis Antetokounmpo', 'Norris Cole (a)', 'Darrell Arthur', 'John Henson', 'Robert Covington', 'Mitch McGary', 'Sergey Karasev', 'Amir Johnson', 'Nikola Pekovic', '(William) Tony Parker', 'Joe Johnson', 'Rodney Hood', 'Chandler Parsons', 'LeBron James', 'Tyson Chandler', 'Omer Asik', 'Bradley Beal', 'Chris Bosh', 'Kyle Korver', 'Beno Udrih', 'Ishmael Smith / Ish Smith', 'Jason Terry', 'Klay Thompson', 'Luke Babbitt', 'Nick Young', 'Michael Carter-Williams', 'Furkan Aldemir', 'Cole Aldrich', 'Lucas Nogueira', 'Tim Hardaway Jr.', 'Donatas Motiejunas', 'Jerryd Bayless', 'Doug McDermott', 'Bismack Biyombo', 'Michael Beasley', 'Matt Bonner', 'Goran Dragic', 'Jose Juan Barea / Jose Barea / J.J. Barea', 'C.J. Watson', 'Russell Westbrook', 'Hollis Thompson', 'Shawn Marion', 'Carlos Boozer', 'Mirza Teletovic', 'Dwight Howard', 'Wilson Chandler', 'Ryan Anderson', 'Joakim Noah', 'DeMar DeRozan', 'Landry Fields', 'Andrea Bargnani', 'Alexey Shved', 'Kevin Garnett', 'Chase Budinger', 'Marco Belinelli', 'Rajon Rondo', 'Tony Allen', 'Rodney Stuckey', 'Quincy Acy', 'Justin Hamilton (b)', 'Gorgui Dieng', 'Marcus Smart', 'Jose Calderon', 'Trevor Booker', 'Kawhi Leonard', 'George Hill', 'Kendrick Perkins', 'Victor Oladipo', 'C.J. Miles', 'Ronnie Price', 'Tarik Black', 'Anthony Davis', 'Mike Conley Jr.', 'Blake Griffin', 'Caron Butler', 'Cleanthony Early', 'Kyle Lowry', 'JaVale McGee', 'Danny Green', 'Eric Moreland', 'LaMarcus Aldridge', 'Reggie Jackson (b)', 'Nicolas Batum', 'Patrick Beverley', 'Channing Frye', 'Udonis Haslem', 'Roy Devyn Marble / Roy Marble (Devyn)', 'Monta Ellis', 'Anthony Morrow', 'Michael Kidd-Gilchrist', 'Jason Richardson', 'Joe Ingles', 'Brandon Jennings', 'Louis Amundson / Lou Amundson', 'Kirk Hinrich', 'Damjan Rudez', 'Jordan Adams', 'Tony Wroten Jr.', 'Al Horford', 'Kenyon Martin', 'Ty Lawson', 'Wesley Matthews / Wes Matthews Jr.', 'Ronny Turiaf', 'Marvin Williams', 'Serge Ibaka', "Amare Stoudemire / Amar'e Stoudemire", 'Louis Williams / Lou Williams', 'Anderson Varejao', 'Kyrie Irving', 'Jordan Clarkson', 'James Johnson', 'Derrick Favors', 'DeMarcus Cousins', 'Austin Rivers', 'Jodie Meeks', 'Jon Leuer', 'Danilo Gallinari', 'Marcus Morris', 'Nik Stauskas', 'Boris Diaw', 'O.J. Mayo', 'Luc Richard Mbah a Moute / Luc Mbah a Moute', 'Erick Green', 'Roy Hibbert', 'Emanuel Ginobili / Manu Ginobili', 'Samuel Dalembert', 'Tobias Harris', 'Brandon Rush', 'Pero Antic', 'Stephen Curry', 'Glen Rice Jr.', 'John Wall (a)', 'J.J. Hickson', 'Ricky Rubio', 'Carl Landry', 'Larry Sanders', 'Jeremy Lin', 'Jabari Parker', 'Brandon Knight', 'David West', 'Luigi Datome / Gigi Datome', 'Jerami Grant', 'Carmelo Anthony', 'Cory Joseph', 'Omri Casspi', 'Troy Daniels', 'Garrett Temple', 'Kostas Papanikolaou', 'Kris Humphries', 'Chris Kaman', 'Thaddeus Young', 'Perry Jones III', 'Shavlik Randolph', 'Tiago Splitter', 'Mario Chalmers', 'Brendan Haywood', 'Ryan Hollins', 'Thabo Sefolosha', 'Al Jefferson', 'Dirk Nowitzki', 'Paul Millsap', 'Shawne Williams', 'Dwyane Wade', 'Gordon Hayward', 'Reggie Evans', 'Iman Shumpert', 'Leandro Barbosa', 'Hidayet Turkoglu / Hedo Turkoglu', 'Nate Wolters', 'Rudy Gay', 'Dewayne Dedmon', 'Derrick Williams', 'Marc Gasol', 'Randy Foye', 'Aron Baynes', 'Nerlens Noel', 'Shabazz Muhammad', 'Kemba Walker', 'Derrick Rose', 'Steve Novak', 'C.J. McCollum', 'Damien Inglis', 'Wesley Johnson / Wes Johnson', 'Kenneth Faried', 'Andrew Bogut', 'Allen Crabbe', 'Julius Randle', 'Xavier Henry', 'Tyler Johnson', 'Khris Middleton', 'Danny Granger', 'Hassan Whiteside', "Johnny O'Bryant III", 'Darren Collison', 'Henry Walker', 'Jeremy Evans', 'Terrence Jones', 'Ramon Sessions', 'Alan Anderson', 'Jameer Nelson', 'Tayshaun Prince', 'J.J. Redick', 'Jusuf Nurkic', 'Evan Fournier', 'DeMarre Carroll', 'Nene / Nene Hilario / Maybyner Hilario', 'Glenn Robinson III', 'Nate Robinson', 'Kendall Marshall', 'Dennis Schroder', 'Jordan Hill', 'P.J. Hairston', 'Quincy Pondexter', 'Kevin Durant', 'Paul Pierce', 'Steve Nash', 'Alonzo Gee', 'Kobe Bryant', 'Jrue Holiday', 'Kevin Seraphin', 'Matt Barnes', "Toure' Murry / Toure Murry", 'Tyreke Evans', 'Ersan Ilyasova', 'Jared Dudley', 'Cody Zeller', 'Spencer Dinwiddie', 'Jeremy Lamb', 'Chris Andersen', 'J.R. Smith'}    # Acquire a sheet by its name
+    book = openpyxl.load_workbook('2014-2015_combined_fill.xlsx')
+    sheet = book.get_sheet_by_name('Sheet1')    
+
+    #315 for 2013-2014
+    #342 for 2014-2015
+    for i in range(2, 342):
+        s = sheet.cell(row=i, column=2).value
+        s = s[1:]
+        if(s in d):
+            sheet.cell(row=i, column=10).value = 'T'
+        else:
+            sheet.cell(row=i, column=10).value = 'F'
+           
+    book.save('2014-2015_combined_fill.xlsx')
+if __name__ == '__main__':
+    main()
