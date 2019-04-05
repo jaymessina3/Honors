@@ -1,0 +1,5 @@
+# Honors
+Predicting Sports Injuries with Machine Learning
+
+Run getData.py to create spreadsheets on your local machine
+Run predict.py to get output of machine learning algorithm
