@@ -7,4 +7,5 @@ For 2014:2015_seasons folder:
 
 For 2018-2019_seasons folder:
 - install cron
-- run crontab file.cron
+- run crontab file.cron to load jobs into cron
+- run crontab -l to see jobs

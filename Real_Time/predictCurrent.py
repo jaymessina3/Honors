@@ -40,13 +40,15 @@ yFinal = []
 xFinal2 = []
 yFinal2 = []
 
-xNate = []
-yNate = []
+xPlayer = []
+yPlayer = []
 
 totalCounter = 0
 majorCounter = 0
 
-player = "LeBron James_2019.xlsx"
+player = ""
+
+#"LeBron James_2019.xlsx"
 
 
 def loadData1(directory):
@@ -59,19 +61,19 @@ def loadData1(directory):
     '''
     xFinal = []
     yFinal = []
-    global xNate
-    global yNate
+    
+    global xPlayer
+    global yPlayer
     
     aWind = 8
     pWind = 4
     
     global totalCounter 
     global majorCounter
-    s = set()
     for filename in os.listdir(directory):
         if(filename==".DS_Store"):
             continue
-        
+        print(filename)
         file = directory + "/" + filename
         dataset = pandas.read_excel(file, names=names)
         array = dataset.values
@@ -108,7 +110,7 @@ def loadData1(directory):
                 continue
             
             if(filename == player):
-                xNate.append(xNew)
+                xPlayer.append(xNew)
             else:
                 xFinal.append(xNew)
             
@@ -124,57 +126,93 @@ def loadData1(directory):
                     counter+=1
             if(counter>=1):
                 if(filename == player):
-                    yNate.append("T")
+                    yPlayer.append("T")
                 else:
                     yFinal.append("T")
             else:
                 if(filename == player):
-                    yNate.append("F")
+                    yPlayer.append("F")
                 else:
                     yFinal.append("F")
     return xFinal, yFinal
         
                 
-
+def loadPlayer(directory):
+    global player
+    names = ['GM', 'Date', 'Weight', 'MP', 'FGA', '3PA', 'FTA', 'ORB', 'DRB', 'AST', 'TO', 'Fouls', 'PTS', 'dist_feet', 'avg_speed', "post_ups", "drives", "Injury"]
+    
+    
+    global xPlayer
+    global yPlayer
+    
+    aWind = 8
+    #pWind = 4
+    path = directory+ "/" + player
+    
+    
+    dataset = pandas.read_excel(path, names=names)
+    array = dataset.values
+    #game = array[:,0,1]
+    game = array[:,0:1]
+    
+    X = array[:,2:17]
+    Y = array[:,17]
+    
+    xFinal = []
+    xNew = []
+    for i in range(len(X)-aWind, len(X)):
+        played = X[i][1]
+        if(played == 0 and (len((str(Y[i])))<2 or (str(Y[i])=="nan"))):
+            print("here")
+            return [[]]
+        
+        elif(played==0): #and were injured
+            
+            xNew.extend([0])
+        else:
+            xNew.extend([1])
+        xNew.extend(X[i])
+        
+    xFinal.append(xNew)
+    
+    return xFinal
 
 def main():
+    
+    global player
+    name = "Tyus Jones"
+    player = name + "_2019.xlsx"
+    
     
     directory = "bball_reference_2013-2014"
     xFinal, yFinal = loadData1(directory)
     directory = "bball_reference_2014-2015"
     xFinal2, yFinal2 = loadData1(directory)
     
+    
     directory = "bball_reference_2018-2019"
     xFinal3, yFinal3 = loadData1(directory)
     
     
+    directory = "bball_reference_2018-2019"
+    xFuture = loadPlayer(directory)
     
-    print(len(xFinal))
-    print(len(yFinal))
-    print("Major injuries", majorCounter)
-    print("total injuries: ", totalCounter)
+    print(xFuture)
+    
+    
+    
+    
     validation_size = 0.20
     seed = random.randint(1, 10000)
     
-    '''
-    global xFinal
-    global yFinal
-    global xFinal2
-    global yFinal2
-    '''
+    #make xFinal and yFinal contain all data but particular player we want to look at
     xFinal.extend(xFinal2)
     xFinal.extend(xFinal3)
     
     yFinal.extend(yFinal2)
     yFinal.extend(yFinal3)
     
-    print(len(xFinal)) 
-    print()
-    print(xFinal[len(xFinal)-1])
-    print(yFinal[len(xFinal)-1]) 
-    print()
-    print(len(yFinal))
-    
+    #used to solve class imbalance problem. with these arrays we have the same amount of true and false values
     xTrue = []
     xFalse = []
     yTrue = []
@@ -190,22 +228,15 @@ def main():
             xFalse.append(xFinal[i])
             yFalse.append(yFinal[i])
     
-    xFalseLess = []
-    yFalseLess = []
+
+    
     randos = []
     rand = random.randint(0, len(xFalse)-1)
     randos.append(rand)
     
-    print("Lengths True")
-    print(len(xTrue))
-    print(len(yTrue))
-    
-    
-    print("Lengths False")
-    print(len(xFalse))
-    print(len(yFalse))
-    
     counter = 0
+    
+    #these array have the same amount of true and false values
     xFinalEdit = []
     yFinalEdit = []
     
@@ -224,13 +255,7 @@ def main():
         counter+=1
            
     
-    #print(xFinalEdit)
-    print(xFinalEdit[len(xFinalEdit)-1])
-    print(len(xFinalEdit[len(xFinalEdit)-1]))
-    print(len(xFinalEdit[len(xFinalEdit)-2]))
     X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(xFinalEdit, yFinalEdit, test_size=validation_size, random_state=seed)
-    
-    
     
     scoring = 'accuracy'
     
@@ -258,21 +283,7 @@ def main():
         names.append(name)
         msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
         print(msg)
-    '''
-    mean_tpr = 0.0
-    mean_fpr = np.linspace(0, 1, 100)
-
-    kfold = model_selection.KFold(n_splits=10, random_state=seed)
-    for (X_train, X_train), x in kfold:
-        probas_ = RandomForestClassifier(n_estimators=100).fit(X_train, Y_train).predict_proba(X_validation)
-        # Compute ROC curve and area the curve
-        fpr, tpr, thresholds = roc_curve(Y_validation, probas_[:, 1])
-        mean_tpr += interp(mean_fpr, fpr, tpr)
-        mean_tpr[0] = 0.0
-        roc_auc = auc(fpr, tpr)
     
-    print(roc_auc)
-    '''
     
     fig = plt.figure()
     fig.suptitle('Algorithm Comparison')
@@ -285,14 +296,9 @@ def main():
     
     #got 90%
     rf = RandomForestClassifier(n_estimators=100)
-    #rf = LinearDiscriminantAnalysis()
-    rf2 = RandomForestClassifier(n_estimators=100)
     #got 58%
     #rf = LogisticRegression()
-    global xNate
-    global yNate
     
-   
     
     rf.fit(X_train, Y_train)
     
@@ -336,31 +342,47 @@ def main():
     print(confusion_matrix(Y_validation, predictions))
     print(classification_report(Y_validation, predictions))
     
-    #rf2.fit(xFinalEdit, yFinalEdit)
     
-    predictions2 = rf.predict(xNate) 
-    y_predict_probabilities2 = rf.predict_proba(xNate)[:,1]
+    #now look at particular player's data
+    global xPlayer
+    global yPlayer
+    predictions2 = rf.predict(xPlayer) 
+    y_predict_probabilities2 = rf.predict_proba(xPlayer)[:,1]
+    
+    print("Actual results")
+    print(yPlayer)
+    print("Predicted probabilities")
     print(y_predict_probabilities2)
+    
     pred2 = []
-    for i in yNate:
+    for i in yPlayer:
         if i=="T":
             countVal+=1
             pred2.append(1)
         else:
             pred2.append(0)
-    print(yNate)
-    print(predictions2)
-    #fpr, tpr, _ = roc_curve(pred2, y_predict_probabilities2)
-    #print(fpr)
-    #aucurve2 = roc_auc_score(pred2, y_predict_probabilities2)
+   
     print("Area under curve")
     #print(aucurve2)
+        
+    print(accuracy_score(yPlayer, predictions2))
+    print(confusion_matrix(yPlayer, predictions2))
+    print(classification_report(yPlayer, predictions2))
     
-    print("nate")
     
-    print(accuracy_score(yNate, predictions2))
-    print(confusion_matrix(yNate, predictions2))
-    print(classification_report(yNate, predictions2))
+    print()
+    ###games that haven't happened yet
+    
+    if xFuture == [[]]:
+        print("Did not play in some of last 8 games")
+    else:
+        predictions3 = rf.predict(xFuture) 
+        y_predict_probabilities3 = rf.predict_proba(xFuture)[:,1]
+        
+        print("Next 4 games predicted probabilities")
+        print(predictions3)
+        print(y_predict_probabilities3)
+        
     
     '''
     printTrue = 0
